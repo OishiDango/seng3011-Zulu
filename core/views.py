@@ -2,9 +2,10 @@ from pydoc import locate
 import subprocess
 import json
 import os
+from datetime import date, timedelta
+from django.utils.dateparse import parse_date
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 from rest_framework import status
 from .models import Alert
 
@@ -32,6 +33,21 @@ def get_alerts(request):
     species = request.query_params.getlist("species")
     regions = request.query_params.getlist("region")
     locations = request.query_params.getlist("location")
+
+
+    # default behaviour
+    # if from/to not provided -> last 1 year
+
+    today = date.today()
+
+    if not from_date and not to_date:
+        from_date = today - timedelta(days=365)
+        to_date = today
+    else:
+        if from_date:
+            from_date = parse_date(from_date)
+        if to_date:
+            to_date = parse_date(to_date)
 
     # retrieves all alerts from database
     query_set = Alert.objects.all().order_by("-date")
