@@ -4,6 +4,7 @@ import json
 import os
 from datetime import date, timedelta
 from django.utils.dateparse import parse_date
+from django.db.models import Q
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -52,8 +53,41 @@ def get_alerts(request):
     # retrieves all alerts from database
     query_set = Alert.objects.all().order_by("-date")
 
+    # ID filter
     if alert_id:
         query_set = query_set.filter(external_id=alert_id)
+
+    # Date filter
+    if from_date:
+        query_set = query_set.filter(date__gte=from_date)
+
+    if to_date:
+        query_set = query_set.filter(date__lte=to_date)
+
+
+    # Disease filter
+    if diseases:
+        for d in diseases:
+            query_set = query_set.filter(diseases__icontains=d)
+
+    # Species filter
+    if species:
+        for s in species:
+            query_set = query_set.filter(species__icontains=s)
+
+    # Region filter
+    if regions:
+        for r in regions:
+            query_set = query_set.filter(regions__icontains=r)
+
+    # Location filter
+    if locations:
+        location_query = Q()
+
+        for loc in locations:
+            location_query |= Q(locations__icontains=loc)
+
+        query_set = query_set.filter(location_query)
 
     def serialise(alert):
         return {
