@@ -26,14 +26,24 @@ def filter_alerts(params, default_days=365):
 
     today = date.today()
 
+    raw_from = params.get("from")
+    raw_to = params.get("to")
+
+    from_date = parse_date(raw_from) if raw_from else None
+    to_date = parse_date(raw_to) if raw_to else None
+
     if not from_date and not to_date:
+        # default window
         from_date = today - timedelta(days=default_days)
         to_date = today
-    else:
-        if from_date:
-            from_date = parse_date(from_date)
-        if to_date:
-            to_date = parse_date(to_date)
+
+    elif from_date and not to_date:
+        # user provided from only
+        to_date = today
+
+    elif to_date and not from_date:
+        # user provided to only
+        from_date = to_date - timedelta(days=default_days)
 
     query_set = Alert.objects.all().order_by("-date")
 
