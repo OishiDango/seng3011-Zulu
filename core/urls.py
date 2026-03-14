@@ -7,4 +7,3 @@ urlpatterns = [
     path('search-def/', views.simple_scrapy_test, name='search_def'),
     path('stats/regions', stats_regions, name="stats-regions")
 ]
-

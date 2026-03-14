@@ -1,0 +1,7 @@
+[flake8]
+exclude = venv,.venv,__pycache__,.git,.mypy_cache,.pytest_cache
+max-line-length = 88
+
+per-file-ignores =
+    seng3011/settings.py:E501
+    scraper/scraper/settings.py:E501

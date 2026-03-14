@@ -1,7 +1,5 @@
 from playwright.sync_api import sync_playwright
 from urllib.parse import urlparse, parse_qs
-import os
-
 
 PROMED_EMAIL = "z5480247@ad.unsw.edu.au"
 PROMED_PASSWORD = "79E8CRr!CRvw!PR"
