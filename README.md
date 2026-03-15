@@ -1,51 +1,79 @@
-This is a Django Rest Framework that use for API creation
+# Zulu Health Alerts API
 
-Window initialise steps:
+## Project Overview
+This project implements a Django REST Framework microservice for collecting and serving public health event alerts using ProMED data.
 
-1. Create a Virtual Environment:
+The service forms part of the Event Intelligence Ecosystem and provides structured alert data via REST APIs.
+
+---
+
+## Setup
+
+Create virtual environment
 
 python -m venv venv
 
-2. Activate Virtual Environment:
+Activate
 
 .\venv\Scripts\activate
 
-3. Install Dependencies:
+Install dependencies
 
 pip install -r requirements.txt
 
-4. Run the Development Server:
+---
+
+## Run the Server
 
 python manage.py migrate
 
 python manage.py runserver
 
-5. Check in your browser:
+Open browser:
 
 http://127.0.0.1:8000/api/hello/
 
-Don't touch "seng3011" it's the global settings!
+---
 
-core/views.py: Write your API logic and functions here.
+##Swagger API documentation:
 
-core/urls.py: Define the paths for your APIs here.
+http://127.0.0.1:8000/swagger/
 
-Lintest:
-Run All Checks
-To run all automated checks for the project:
+---
+
+## Docker
+
+Build image
+
+docker build -t zulu-health-alerts-api .
+
+Run container
+
+docker run -p 8000:8000 zulu-health-alerts-api
+
+---
+
+## Code Quality
+
+Run all checks
+
 python run_checks.py
 
-This script runs:
-Lint – checks code style and formatting using flake8
-Type Check – verifies Python type hints using mypy
-Django Check – validates Django configuration
-Tests – runs the test suite using pytest
+Includes:
 
-To automatically fix common linting problems, run:
+- flake8
+- mypy
+- django check
+- pytest
+
+Auto fix lint issues
+
 python fix_lint.py
 
-This script will:
-Remove unused imports and variables (autoflake)
-Automatically fix many PEP8 formatting issues (autopep8)
-Reformat code consistently (black)
-Run flake8 again to check remaining issues
+---
+
+## Project Structure
+
+core/ – API logic  
+scraper/ – data collection  
+seng3011/ – Django project settings （Don't edit!!!)
