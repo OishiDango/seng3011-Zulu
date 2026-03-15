@@ -106,5 +106,513 @@
         ["United Kingdom"]
       ]
     }
+  },
+  {
+    "model": "core.alert",
+    "pk": 8,
+    "fields": {
+      "external_id": "8730433",
+      "date": "2026-01-29",
+      "title": "MEASLES - MEXICO (02): 2025 STATISTICS, FIRST FATAL CASE OF 2026",
+      "diseases": ["Measles"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["Mexico", "Mexico City", "Mexico City"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 9,
+    "fields": {
+      "external_id": "8730293",
+      "date": "2026-01-24",
+      "title": "HANSEN'S DISEASE - EUROPE: SURVEILLANCE, WORLD LEPROSY DAY 2026",
+      "diseases": ["Leprosy"],
+      "species": ["Humans"],
+      "regions": ["Europe"],
+      "locations": [
+        ["Germany", "Baden-Württemberg", "Stuttgart"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 10,
+    "fields": {
+      "external_id": "8730891",
+      "date": "2026-02-16",
+      "title": "MEASLES - CANADA (06): (MANITOBA) EXPOSURES, INCLUDING LARGE INDOOR EVENTS",
+      "diseases": ["Measles"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["Canada", "Manitoba"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 11,
+    "fields": {
+      "external_id": "8726506",
+      "date": "2025-08-13",
+      "title": "MEASLES - USA (113): (IDAHO) STATE'S FIRST 2025 CASE",
+      "diseases": ["Measles"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States", "District of Columbia", "Washington"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 12,
+    "fields": {
+      "external_id": "8726280",
+      "date": "2025-08-05",
+      "title": "MEASLES - USA (110): (WISCONSIN) FIRST 2025 STATE CASES",
+      "diseases": ["Measles"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States", "Wisconsin", "Oconto"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 13,
+    "fields": {
+      "external_id": "8730649",
+      "date": "2026-02-07",
+      "title": "SALMONELLOSIS, SEROTYPE LOMALINDA: FDA, LEAFY GREENS, 2025",
+      "diseases": ["Salmonella"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 14,
+    "fields": {
+      "external_id": "8730512",
+      "date": "2026-02-02",
+      "title": "LEGIONELLOSIS - USA (05): (NEW YORK) NEW YORK CITY",
+      "diseases": ["Legionnaires"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States", "New York State", "New York City"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 15,
+    "fields": {
+      "external_id": "8730105",
+      "date": "2026-01-16",
+      "title": "SALMONELLOSIS, SEROTYPE TYPHIMURIUM - USA: DIETARY SUPPLEMENT POWDER, ALERT, RECALL",
+      "diseases": ["Salmonella"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 16,
+    "fields": {
+      "external_id": "8729817",
+      "date": "2026-01-03",
+      "title": "CHIKUNGUNYA (01): GLOBAL, WHO RAPID RISK ASSESSMENT",
+      "diseases": ["Chikungunya"],
+      "species": ["Humans"],
+      "regions": ["Worldwide"],
+      "locations": [
+        ["Worldwide"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 17,
+    "fields": {
+      "external_id": "8729376",
+      "date": "2025-12-12",
+      "title": "INFANT BOTULISM - USA (11): POWDERED INFANT FORMULA, ADDITIONAL CASES",
+      "diseases": ["Botulism"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 18,
+    "fields": {
+      "external_id": "8728907",
+      "date": "2025-11-21",
+      "title": "E COLI EHEC - FRANCE, BELGIUM, UK",
+      "diseases": ["E. coli"],
+      "species": ["Humans"],
+      "regions": ["Europe"],
+      "locations": [
+        ["France", "Île-de-France", "Paris"],
+        ["Belgium", "Brussels-Capital Region", "Brussels"],
+        ["United Kingdom", "England", "London"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 19,
+    "fields": {
+      "external_id": "8727600",
+      "date": "2025-09-27",
+      "title": "USUTU & WEST NILE VIRUSES - NETHERLANDS",
+      "diseases": ["West Nile Virus"],
+      "species": ["Humans"],
+      "regions": ["Europe"],
+      "locations": [
+        ["Netherlands", "North Holland", "Amsterdam"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 20,
+    "fields": {
+      "external_id": "8727393",
+      "date": "2025-09-18",
+      "title": "LASSA FEVER - NIGERIA (18): CASE SURGE, FATAL",
+      "diseases": ["Lassa Fever"],
+      "species": ["Humans"],
+      "regions": ["Africa"],
+      "locations": [
+        ["Nigeria", "FCT", "Abuja"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 21,
+    "fields": {
+      "external_id": "8723314",
+      "date": "2025-04-02",
+      "title": "SALMONELLOSIS, SEROTYPE BLOCKLEY - UK: UNKNOWN SOURCE, 2024",
+      "diseases": ["Salmonella"],
+      "species": ["Humans"],
+      "regions": ["Europe"],
+      "locations": [
+        ["United Kingdom"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 22,
+    "fields": {
+      "external_id": "8721537",
+      "date": "2025-01-22",
+      "title": "CHIKUNGUNYA (04): FRANCE (REUNION)",
+      "diseases": ["Chikungunya"],
+      "species": ["Humans"],
+      "regions": ["Europe"],
+      "locations": [
+        ["France", "Île-de-France", "Paris"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 23,
+    "fields": {
+      "external_id": "8720687",
+      "date": "2024-12-17",
+      "title": "OROPOUCHE VIRUS - AMERICAS (09): PAHO/WHO",
+      "diseases": ["Other Human Disease"],
+      "species": ["Humans"],
+      "regions": ["South America", "North America"],
+      "locations": [
+        ["Ecuador", "Pichincha", "Quito"],
+        ["Guyana", "Demerara-Mahaica", "Georgetown"],
+        ["Panama", "Panamá", "Panama City"],
+        ["Canada", "Ontario", "Ottawa"],
+        ["United States", "District of Columbia", "Washington"],
+        ["Bolivia", "Chuquisaca", "Sucre"],
+        ["Brazil", "Distrito Federal", "Brasília"],
+        ["Cayman Islands", "Grand Cayman", "George Town"],
+        ["Colombia", "Bogotá D.C.", "Bogotá"],
+        ["Cuba", "La Habana", "Havana"],
+        ["Peru", "Lima", "Lima"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 24,
+    "fields": {
+      "external_id": "8720621",
+      "date": "2024-12-13",
+      "title": "VECTOR BORNE DISEASES - INDIA (12): (TELANGANA) INCREASE",
+      "diseases": ["Dengue", "Malaria", "Chikungunya"],
+      "species": ["Humans"],
+      "regions": ["Asia"],
+      "locations": [
+        ["India", "Telangana", "Hyderabad"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 25,
+    "fields": {
+      "external_id": "8720357",
+      "date": "2024-11-30",
+      "title": "AFRICAN SWINE FEVER - ASIA (70): BHUTAN (GEYLEPHUG) DOMESTIC, WOAH",
+      "diseases": ["African Swine Fever"],
+      "species": ["Pigs"],
+      "regions": ["Asia"],
+      "locations": [
+        ["Bhutan", "Thimphu", "Thimphu"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 26,
+    "fields": {
+      "external_id": "8720318",
+      "date": "2024-11-29",
+      "title": "LUMPY SKIN DISEASE - TUNISIA (03): CATTLE, SPREAD",
+      "diseases": ["Lumpy Skin Disease"],
+      "species": ["Cows"],
+      "regions": ["Africa"],
+      "locations": [
+        ["Tunisia", "Tunis", "Tunis"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 27,
+    "fields": {
+      "external_id": "8720063",
+      "date": "2024-11-16",
+      "title": "LUMPY SKIN DISEASE - ALGERIA (16): (SOUK AHRAS) CATTLE",
+      "diseases": ["Lumpy Skin Disease"],
+      "species": ["Cows"],
+      "regions": ["Africa"],
+      "locations": [
+        ["Algeria", "Algiers", "Algiers"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 28,
+    "fields": {
+      "external_id": "8720061",
+      "date": "2024-11-16",
+      "title": "MEASLES - VIET NAM (11): (HO CHI MINH CITY) INCREASE, FATAL",
+      "diseases": ["Measles"],
+      "species": ["Humans"],
+      "regions": ["Asia"],
+      "locations": [
+        ["Vietnam", "Da Nang", "Da Nang"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 29,
+    "fields": {
+      "external_id": "8719909",
+      "date": "2024-11-10",
+      "title": "MEASLES - VIET NAM (10): (HO CHI MINH CITY) VACCINATION OF CHILDREN AGED 6 TO 9 MONTHS",
+      "diseases": ["Measles"],
+      "species": ["Humans"],
+      "regions": ["Asia"],
+      "locations": [
+        ["Vietnam", "Da Nang", "Da Nang"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 30,
+    "fields": {
+      "external_id": "8719386",
+      "date": "2024-10-15",
+      "title": "AVIAN INFLUENZA (118): VIET NAM, TIGER, LION, HPAI H5N1, WOAH",
+      "diseases": ["Avian Influenza H5N1"],
+      "species": ["Tigers", "Lions"],
+      "regions": ["Asia"],
+      "locations": [
+        ["Vietnam", "Da Nang", "Da Nang"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 31,
+    "fields": {
+      "external_id": "8728922",
+      "date": "2025-11-21",
+      "title": "MEASLES - FRANCE (03): (AUVERGNE-RHONE-ALPES) OUTBREAK IN A HIGHLY VACCINATED SCHOOL, 2023",
+      "diseases": ["Measles"],
+      "species": ["Humans"],
+      "regions": ["Europe"],
+      "locations": [
+        ["France", "Auvergne-Rhône-Alpes"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 32,
+    "fields": {
+      "external_id": "8716456",
+      "date": "2024-05-12",
+      "title": "E. COLI EHEC - USA (07): (UTAH) O157, UNTREATED MUNICIPAL IRRIGATION WATER, 2023",
+      "diseases": ["E. coli"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States", "Utah"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 33,
+    "fields": {
+      "external_id": "8714314",
+      "date": "2024-01-19",
+      "title": "CLOSTRIDIUM PERFRINGENS FOODBORNE ILLNESS - USA: (COLORADO) BARBECUE, 2023",
+      "diseases": ["Clostridium perfringens"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States", "Colorado"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 34,
+    "fields": {
+      "external_id": "8719727",
+      "date": "2024-11-02",
+      "title": "MENINGITIS, MENINGOCOCCAL - USA (02): (VIRGINIA) SEROGROUP Y, CDC, 2022-2024",
+      "diseases": ["Meningitis - Neisseria"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States", "Virginia"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 35,
+    "fields": {
+      "external_id": "8713622",
+      "date": "2023-12-10",
+      "title": "AVIAN INFLUENZA (190): SOUTH KOREA (JEOLLABUK-DO) HPAI H5N1, BIRD, WOAH",
+      "diseases": ["Avian Influenza H5N1"],
+      "species": ["Birds"],
+      "regions": ["Asia"],
+      "locations": [
+        ["South Korea", "Jeollabuk-do", "Jeonju"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 36,
+    "fields": {
+      "external_id": "8713120",
+      "date": "2023-11-13",
+      "title": "LEGIONELLOSIS - AMERICAS (25): USA (NEW JERSEY) REQUEST FOR INFORMATION",
+      "diseases": ["Legionnaires"],
+      "species": ["Humans"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States", "New Jersey"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 37,
+    "fields": {
+      "external_id": "8713000",
+      "date": "2023-11-06",
+      "title": "CORONAVIRUS DISEASE 2019 UPDATE (33): UPDATES FOR SELECTED COUNTRIES, VACCINES, VACCINE REFUSAL, WHO MONTHLY UPDATE",
+      "diseases": ["COVID-19"],
+      "species": ["Humans"],
+      "regions": ["Worldwide"],
+      "locations": [
+        ["Worldwide"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 38,
+    "fields": {
+      "external_id": "8712590",
+      "date": "2023-10-13",
+      "title": "CRIMEAN-CONGO HEMORRHAGIC FEVER - AFRICA (06): MAURITANIA (ASSABA)",
+      "diseases": ["Crimean-Congo Hemorrhagic Fever"],
+      "species": ["Humans"],
+      "regions": ["Africa"],
+      "locations": [
+        ["Mauritania", "Assaba", "Assaba"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 39,
+    "fields": {
+      "external_id": "8712386",
+      "date": "2023-10-01",
+      "title": "CLOSTRIDIUM CHAUVOEI, HUMAN - AUSTRALIA: RARE ZOONOSIS",
+      "diseases": ["Other Human Disease"],
+      "species": ["Humans"],
+      "regions": ["Australia"],
+      "locations": [
+        ["Australia", "Australian Capital Territory", "Canberra"]
+      ]
+    }
+  },
+  {
+    "model": "core.alert",
+    "pk": 40,
+    "fields": {
+      "external_id": "8712134",
+      "date": "2023-09-16",
+      "title": "ANTHRAX - USA (08): (TEXAS, SOUTH DAKOTA) LIVESTOCK",
+      "diseases": ["Anthrax"],
+      "species": ["Cows", "Goats"],
+      "regions": ["North America"],
+      "locations": [
+        ["United States", "Texas", "Austin"],
+        ["United States", "South Dakota", "Pierre"]
+      ]
+    }
   }
 ]

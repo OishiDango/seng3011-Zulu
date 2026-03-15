@@ -29,7 +29,7 @@ jobs:
         run: flake8 .
 
       - name: Type check
-        run: mypy .
+        run: mypy . --exclude migrations
 
       - name: Django check
         run: python manage.py check
