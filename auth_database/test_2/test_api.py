@@ -48,9 +48,7 @@ reset_request_data = {"email": "alice@example.com"}
 reset_request_resp = requests.post(
     f"{BASE_URL}/password-reset/request", json=reset_request_data
 )
-print(
-    "Password reset request response:", reset_request_resp.json()
-)
+print("Password reset request response:", reset_request_resp.json())
 
 # IMPORTANT: Check your terminal running FastAPI — the token is printed there
 reset_token = input("Enter the password reset token shown in the terminal: ")
@@ -78,6 +76,4 @@ signin_data_new = {
 }
 
 signin_resp_new = requests.post(f"{BASE_URL}/signin", json=signin_data_new)
-print(
-    "Signin with new password response:", signin_resp_new.json()
-)
+print("Signin with new password response:", signin_resp_new.json())

@@ -1,4 +1,5 @@
 import os
+
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
@@ -29,8 +30,7 @@ def init_db():
     cursor = conn.cursor()
 
     # Users table
-    cursor.execute(
-        """
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             email TEXT UNIQUE NOT NULL,
@@ -39,32 +39,27 @@ def init_db():
             subscribed BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-        """
-    )
+        """)
 
     # Sessions table
-    cursor.execute(
-        """
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS sessions (
             id SERIAL PRIMARY KEY,
             user_id INTEGER NOT NULL REFERENCES users(id),
             session_token TEXT UNIQUE NOT NULL,
             login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-        """
-    )
+        """)
 
     # Password reset tokens table
-    cursor.execute(
-        """
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS password_reset_tokens (
             id SERIAL PRIMARY KEY,
             email TEXT NOT NULL,
             token TEXT UNIQUE NOT NULL,
             expires_at TIMESTAMP NOT NULL
         )
-        """
-    )
+        """)
 
     conn.commit()
     conn.close()

@@ -1,8 +1,9 @@
-import bcrypt
-import uuid
-import secrets
-import jwt
 import datetime
+import secrets
+import uuid
+
+import bcrypt
+import jwt
 
 JWT_SECRET = "your_secret_key"
 
@@ -20,8 +21,7 @@ def create_jwt(user_id: int, email: str, role: str) -> str:
         "id": user_id,
         "email": email,
         "role": role,
-        "exp": datetime.datetime.utcnow()
-        + datetime.timedelta(hours=720),
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=720),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
 

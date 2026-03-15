@@ -1,15 +1,12 @@
-from fastapi import FastAPI, HTTPException, Header
-from pydantic import BaseModel, EmailStr
-from database import get_db
-from auth_utils import (
-    hash_password,
-    verify_password,
-    create_jwt,
-    generate_session_token,
-    generate_reset_token,
-    token_expiry,
-)
 from datetime import datetime
+
+from fastapi import FastAPI, Header, HTTPException
+from pydantic import BaseModel, EmailStr
+
+from auth_utils import (create_jwt, generate_reset_token,
+                        generate_session_token, hash_password, token_expiry,
+                        verify_password)
+from database import get_db
 
 app = FastAPI()
 
@@ -85,7 +82,11 @@ def signin(data: SigninSchema):
     conn.commit()
     conn.close()
 
-    return {"message": "Sign-in successful", "token": token, "sessionToken": session_token}
+    return {
+        "message": "Sign-in successful",
+        "token": token,
+        "sessionToken": session_token,
+    }
 
 
 # ------------------------------
@@ -96,9 +97,7 @@ def signout(x_session_id: str = Header(...)):
     conn = get_db()
     cursor = conn.cursor()
 
-    cursor.execute(
-        "SELECT * FROM sessions WHERE session_token = %s", (x_session_id,)
-    )
+    cursor.execute("SELECT * FROM sessions WHERE session_token = %s", (x_session_id,))
     session = cursor.fetchone()
     if not session:
         raise HTTPException(status_code=401, detail="Invalid or expired session")
@@ -132,7 +131,8 @@ def request_password_reset(data: PasswordResetRequestSchema):
     expires_at = token_expiry()
 
     cursor.execute(
-        "INSERT INTO password_reset_tokens (email, token, expires_at) VALUES (%s, %s, %s)",
+        "INSERT INTO password_reset_tokens (email, token, expires_at) "
+        "VALUES (%s, %s, %s)",
         (data.email.lower(), token, expires_at),
     )
     conn.commit()
@@ -165,9 +165,7 @@ def reset_password(data: PasswordResetSchema):
         "UPDATE users SET password = %s WHERE email = %s",
         (hashed_password, data.email.lower()),
     )
-    cursor.execute(
-        "DELETE FROM password_reset_tokens WHERE token = %s", (data.token,)
-    )
+    cursor.execute("DELETE FROM password_reset_tokens WHERE token = %s", (data.token,))
     conn.commit()
     conn.close()
 
