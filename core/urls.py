@@ -8,4 +8,3 @@ urlpatterns = [
     path('stats/regions', stats_regions, name="stats_regions"),
     path('stats/diseases', views.stats_diseases, name="stats_diseases")
 ]
-

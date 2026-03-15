@@ -1,7 +1,9 @@
-import scrapy
 import json
-from pathlib import Path
 from datetime import datetime, timezone
+from pathlib import Path
+
+import scrapy
+
 
 def clean_text(value):
     if value is None:
@@ -36,7 +38,10 @@ def unique_list_keep_order(values):
 def unix_to_date_string(timestamp):
     if not timestamp:
         return None
-    return datetime.fromtimestamp(timestamp, tz=timezone.utc).strftime("%Y-%m-%d")
+    return datetime.fromtimestamp(
+        timestamp,
+        tz=timezone.utc,
+    ).strftime("%Y-%m-%d")
 
 
 def extract_diseases(alert):
@@ -88,10 +93,11 @@ def extract_locations(alert):
         if locality:
             parts.append(locality)
 
-        if parts:  
+        if parts:
             locations.append(parts)
 
     return unique_list_keep_order(locations)
+
 
 def transform_alert(alert, pk):
     return {
@@ -104,8 +110,8 @@ def transform_alert(alert, pk):
             "diseases": extract_diseases(alert),
             "species": extract_species(alert),
             "regions": extract_regions(alert),
-            "locations": extract_locations(alert)
-        }
+            "locations": extract_locations(alert),
+        },
     }
 
 
@@ -118,14 +124,22 @@ class PromedSpider(scrapy.Spider):
         "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
     }
 
+    highlight_fields = (
+        "full_text,post_title,subject_line,"
+        "moderator_comments,places,diseases,species"
+    )
+
+    query_fields = (
+        "full_text,post_title,subject_line,"
+        "moderator_comments,places,diseases,species"
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         key_path = Path("promed_key.txt")
         if not key_path.exists():
-            raise FileNotFoundError(
-                "promed_key.txt not found. Run get_key.py first."
-            )
+            raise FileNotFoundError("promed_key.txt not found. Run get_key.py first.")
 
         self.api_key = key_path.read_text(encoding="utf-8").strip()
         if not self.api_key:
@@ -148,25 +162,25 @@ class PromedSpider(scrapy.Spider):
                     "collection": "alerts",
                     "facet_by": "issue_date,network",
                     "filter_by": "network:=[`ProMED Mail`]",
-                    "highlight_full_fields": "full_text,post_title,subject_line,moderator_comments,places,diseases,species",
+                    "highlight_full_fields": self.highlight_fields,
                     "max_facet_values": 50,
                     "min_len_1typo": 6,
                     "min_len_2typo": 9,
                     "page": page,
                     "q": "*",
-                    "query_by": "full_text,post_title,subject_line,moderator_comments,places,diseases,species",
+                    "query_by": self.query_fields,
                 },
                 {
                     "collection": "alerts",
                     "facet_by": "network",
-                    "highlight_full_fields": "full_text,post_title,subject_line,moderator_comments,places,diseases,species",
+                    "highlight_full_fields": self.highlight_fields,
                     "max_facet_values": 50,
                     "min_len_1typo": 6,
                     "min_len_2typo": 9,
                     "page": 1,
                     "per_page": 0,
                     "q": "*",
-                    "query_by": "full_text,post_title,subject_line,moderator_comments,places,diseases,species",
+                    "query_by": self.query_fields,
                 },
             ]
         }

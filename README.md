@@ -1,6 +1,7 @@
 This is a Django Rest Framework that use for API creation
 
 Window initialise steps:
+
 1. Create a Virtual Environment:
 
 python -m venv venv
@@ -29,4 +30,22 @@ core/views.py: Write your API logic and functions here.
 
 core/urls.py: Define the paths for your APIs here.
 
+Lintest:
+Run All Checks
+To run all automated checks for the project:
+python run_checks.py
 
+This script runs:
+Lint – checks code style and formatting using flake8
+Type Check – verifies Python type hints using mypy
+Django Check – validates Django configuration
+Tests – runs the test suite using pytest
+
+To automatically fix common linting problems, run:
+python fix_lint.py
+
+This script will:
+Remove unused imports and variables (autoflake)
+Automatically fix many PEP8 formatting issues (autopep8)
+Reformat code consistently (black)
+Run flake8 again to check remaining issues
