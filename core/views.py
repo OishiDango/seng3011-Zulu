@@ -114,6 +114,7 @@ def stats_regions(request):
         status=status.HTTP_200_OK,
     )
 
+
 @api_view(["GET"])
 def stats_diseases(request):
     query_set, from_date, to_date = filter_alerts(request.query_params, default_days=30)
@@ -127,7 +128,10 @@ def stats_diseases(request):
 
     by_disease = [
         {"disease": disease, "count": count}
-        for disease, count in sorted(disease_counter.items(), key=lambda x: (-x[1], x[0]))
+        for disease, count in sorted(
+            disease_counter.items(),
+            key=lambda x: (-x[1], x[0]),
+        )
     ]
 
     return Response(
@@ -138,6 +142,7 @@ def stats_diseases(request):
         },
         status=status.HTTP_200_OK,
     )
+
 
 @api_view(["GET"])
 def hello_world(request):
