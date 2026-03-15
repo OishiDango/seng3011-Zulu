@@ -67,6 +67,18 @@ def filter_alerts(params, default_days=365):
     return query_set, from_date, to_date
 
 
+def serialise_alert(alert):
+    return {
+        "id": alert.external_id,
+        "date": alert.date.isoformat(),
+        "title": alert.title,
+        "disease": alert.diseases,
+        "species": alert.species,
+        "region": alert.regions,
+        "location": alert.locations,
+    }
+
+
 @api_view(["GET"])
 def stats_regions(request):
     query_set, from_date, to_date = filter_alerts(request.query_params, default_days=30)
@@ -99,6 +111,22 @@ def hello_world(request):
 
 
 @api_view(["GET"])
+def get_alerts(request):
+    query_set, from_date, to_date = filter_alerts(request.query_params)
+
+    alerts_out = [serialise_alert(alert) for alert in query_set]
+
+    return Response(
+        {
+            "alerts": alerts_out,
+            "from": from_date.isoformat() if from_date else None,
+            "to": to_date.isoformat() if to_date else None,
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(['GET'])
 def simple_scrapy_test(request):
     scraper_path = os.path.join(os.getcwd(), "scraper")
 
