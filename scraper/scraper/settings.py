@@ -15,7 +15,7 @@ DOWNLOADER_MIDDLEWARES = {
     "scraper.middlewares.PromedprojectDownloaderMiddleware": 543,
 }
 
-ADDONS = {}
+ADDONS: dict[str, object] = {}
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

@@ -20,9 +20,7 @@ class PromedSpider(scrapy.Spider):
 
         key_path = Path("promed_key.txt")
         if not key_path.exists():
-            raise FileNotFoundError(
-                "promed_key.txt not found. Run get_key.py first."
-            )
+            raise FileNotFoundError("promed_key.txt not found. Run get_key.py first.")
 
         self.api_key = key_path.read_text(encoding="utf-8").strip()
         if not self.api_key:
