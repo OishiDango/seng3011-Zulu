@@ -109,6 +109,40 @@ def stats_regions(request):
 
 
 @api_view(["GET"])
+def stats_diseases(request):
+    query_set, from_date, to_date = filter_alerts(request.query_params, default_days=30)
+
+    disease_counter = Counter()
+
+    for alert in query_set:
+        for disease in alert.diseases or []:
+            if disease:
+                disease_counter[disease] += 1
+
+    by_disease = [
+        {"disease": disease, "count": count}
+        for disease, count in sorted(
+            disease_counter.items(),
+            key=lambda x: (-x[1], x[0]),
+        )
+    ]
+
+    return Response(
+        {
+            "from": from_date.isoformat() if from_date else None,
+            "to": to_date.isoformat() if to_date else None,
+            "by_disease": by_disease,
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(["GET"])
+def hello_world(request):
+    return Response({"message": "Hello World!", "status": "success"})
+
+
+@api_view(["GET"])
 def get_alerts(request):
     query_set, from_date, to_date = filter_alerts(request.query_params)
 

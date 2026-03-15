@@ -11,8 +11,12 @@ BOT_NAME = "scraper"
 
 SPIDER_MODULES = ["scraper.spiders"]
 NEWSPIDER_MODULE = "scraper.spiders"
+DOWNLOADER_MIDDLEWARES = {
+    "scraper.middlewares.PromedprojectDownloaderMiddleware": 543,
+}
 
 ADDONS: dict[str, object] = {}
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = "promedproject (+http://www.yourdomain.com)"
@@ -75,7 +79,7 @@ DOWNLOAD_DELAY = 1
 # AUTOTHROTTLE_DEBUG = False
 
 # Enable and configure HTTP caching (disabled by default)
-# https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
+# See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 # HTTPCACHE_ENABLED = True
 # HTTPCACHE_EXPIRATION_SECS = 0
 # HTTPCACHE_DIR = "httpcache"
