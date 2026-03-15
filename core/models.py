@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 # JSON schema for an alert
 class Alert(models.Model):
     external_id = models.CharField(max_length=50)

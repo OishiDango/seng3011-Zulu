@@ -66,6 +66,7 @@ def filter_alerts(params, default_days=365):
 
     return query_set, from_date, to_date
 
+
 def serialise_alert(alert):
     return {
         "id": alert.external_id,
@@ -76,6 +77,7 @@ def serialise_alert(alert):
         "region": alert.regions,
         "location": alert.locations,
     }
+
 
 @api_view(["GET"])
 def stats_regions(request):
@@ -107,6 +109,7 @@ def stats_regions(request):
 def hello_world(request):
     return Response({"message": "Hello World!", "status": "success"})
 
+
 @api_view(["GET"])
 def get_alerts(request):
     query_set, from_date, to_date = filter_alerts(request.query_params)
@@ -121,6 +124,7 @@ def get_alerts(request):
         },
         status=status.HTTP_200_OK,
     )
+
 
 @api_view(['GET'])
 def simple_scrapy_test(request):
