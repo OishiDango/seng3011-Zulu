@@ -1,118 +1,8 @@
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import scrapy
-
-
-def clean_text(value):
-    if value is None:
-        return None
-    if not isinstance(value, str):
-        value = str(value)
-
-    value = value.strip()
-
-    if value == "" or value.lower() in {"null", "none", "string"}:
-        return None
-
-    return value
-
-
-def unique_list_keep_order(values):
-    seen = set()
-    result = []
-
-    for value in values:
-        if value is None:
-            continue
-
-        key = tuple(value) if isinstance(value, list) else value
-        if key not in seen:
-            seen.add(key)
-            result.append(value)
-
-    return result
-
-
-def unix_to_date_string(timestamp):
-    if not timestamp:
-        return None
-    return datetime.fromtimestamp(
-        timestamp,
-        tz=timezone.utc,
-    ).strftime("%Y-%m-%d")
-
-
-def extract_diseases(alert):
-    diseases = []
-    for item in alert.get("diseases", []):
-        name = clean_text(item.get("name"))
-        if name:
-            diseases.append(name)
-    return unique_list_keep_order(diseases)
-
-
-def extract_species(alert):
-    species = []
-    for item in alert.get("species", []):
-        name = clean_text(item.get("name"))
-        if name:
-            species.append(name)
-    return unique_list_keep_order(species)
-
-
-def extract_regions(alert):
-    regions = []
-    for loc in alert.get("locations", []):
-        location_info = loc.get("location", {})
-        continent = clean_text(location_info.get("continent"))
-        if continent:
-            regions.append(continent)
-    return unique_list_keep_order(regions)
-
-
-def extract_locations(alert):
-    locations = []
-
-    for loc in alert.get("locations", []):
-        location_info = loc.get("location", {})
-
-        country = clean_text(location_info.get("country") or loc.get("country"))
-        region = clean_text(location_info.get("region"))
-        locality = clean_text(location_info.get("locality"))
-
-        parts = []
-
-        if country:
-            parts.append(country)
-
-        if region:
-            parts.append(region)
-
-        if locality:
-            parts.append(locality)
-
-        if parts:
-            locations.append(parts)
-
-    return unique_list_keep_order(locations)
-
-
-def transform_alert(alert, pk):
-    return {
-        "model": "core.alert",
-        "pk": pk,
-        "fields": {
-            "external_id": str(alert.get("alert_id")),
-            "date": unix_to_date_string(alert.get("issue_date")),
-            "title": alert.get("title"),
-            "diseases": extract_diseases(alert),
-            "species": extract_species(alert),
-            "regions": extract_regions(alert),
-            "locations": extract_locations(alert),
-        },
-    }
 
 
 class PromedSpider(scrapy.Spider):
@@ -120,19 +10,10 @@ class PromedSpider(scrapy.Spider):
 
     custom_settings = {
         "ROBOTSTXT_OBEY": False,
-        "DOWNLOAD_DELAY": 0.5,
+        "DOWNLOAD_DELAY": 0.1,
         "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
+        "LOG_LEVEL": "INFO",
     }
-
-    highlight_fields = (
-        "full_text,post_title,subject_line,"
-        "moderator_comments,places,diseases,species"
-    )
-
-    query_fields = (
-        "full_text,post_title,subject_line,"
-        "moderator_comments,places,diseases,species"
-    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -145,7 +26,7 @@ class PromedSpider(scrapy.Spider):
         if not self.api_key:
             raise ValueError("promed_key.txt is empty.")
 
-        self.pk_counter = 1
+        self.item_count = 0
 
     def start_requests(self):
         yield self.make_request(page=1)
@@ -156,31 +37,36 @@ class PromedSpider(scrapy.Spider):
             f"?x-typesense-api-key={self.api_key}"
         )
 
+        search_fields = (
+            "full_text,post_title,subject_line,"
+            "moderator_comments,places,diseases,species"
+        )
+
         payload = {
             "searches": [
                 {
                     "collection": "alerts",
                     "facet_by": "issue_date,network",
                     "filter_by": "network:=[`ProMED Mail`]",
-                    "highlight_full_fields": self.highlight_fields,
+                    "highlight_full_fields": search_fields,
                     "max_facet_values": 50,
                     "min_len_1typo": 6,
                     "min_len_2typo": 9,
                     "page": page,
                     "q": "*",
-                    "query_by": self.query_fields,
+                    "query_by": search_fields,
                 },
                 {
                     "collection": "alerts",
                     "facet_by": "network",
-                    "highlight_full_fields": self.highlight_fields,
+                    "highlight_full_fields": search_fields,
                     "max_facet_values": 50,
                     "min_len_1typo": 6,
                     "min_len_2typo": 9,
                     "page": 1,
                     "per_page": 0,
                     "q": "*",
-                    "query_by": self.query_fields,
+                    "query_by": search_fields,
                 },
             ]
         }
@@ -200,6 +86,54 @@ class PromedSpider(scrapy.Spider):
             dont_filter=True,
         )
 
+    def extract_names(self, items):
+        if not items:
+            return []
+        return [item.get("name") for item in items if item.get("name")]
+
+    def extract_regions(self, places):
+        if not places:
+            return []
+
+        regions = []
+        seen = set()
+
+        for place in places:
+            location = place.get("location", {})
+            continent = location.get("continent")
+            if continent and continent not in seen:
+                seen.add(continent)
+                regions.append(continent)
+
+        return regions
+
+    def extract_locations(self, places):
+        if not places:
+            return []
+
+        cleaned_locations = []
+
+        for place in places:
+            location = place.get("location", {})
+            country = location.get("country") or place.get("country")
+            region = location.get("region")
+            locality = location.get("locality")
+
+            cleaned_locations.append(
+                [
+                    country or "",
+                    region or "",
+                    locality or "",
+                ]
+            )
+
+        return cleaned_locations
+
+    def format_date(self, timestamp):
+        if not timestamp:
+            return None
+        return datetime.fromtimestamp(timestamp, UTC).date().isoformat()
+
     def parse(self, response, page):
         if response.status != 200:
             self.logger.error(f"Page {page} failed with status {response.status}")
@@ -213,22 +147,34 @@ class PromedSpider(scrapy.Spider):
 
         for hit in hits:
             doc = hit["document"]
+            self.item_count += 1
 
-            raw_alert = {
-                "page": page,
-                "alert_id": doc.get("alert_id"),
-                "title": doc.get("post_title"),
-                "diseases": doc.get("diseases"),
-                "species": doc.get("species"),
-                "locations": doc.get("places"),
-                "issue_date": doc.get("issue_date"),
-                "network": doc.get("network"),
+            external_id = str(doc.get("alert_id"))
+            title = doc.get("post_title")
+            diseases = self.extract_names(doc.get("diseases"))
+            species = self.extract_names(doc.get("species"))
+            places = doc.get("places")
+            regions = self.extract_regions(places)
+            locations = self.extract_locations(places)
+            date = self.format_date(doc.get("issue_date"))
+
+            self.logger.info(
+                f"data #{self.item_count} | page={page} | alert_id={external_id}"
+            )
+
+            yield {
+                "model": "core.alert",
+                "pk": self.item_count,
+                "fields": {
+                    "external_id": external_id,
+                    "date": date,
+                    "title": title,
+                    "diseases": diseases,
+                    "species": species,
+                    "regions": regions,
+                    "locations": locations,
+                },
             }
-
-            transformed = transform_alert(raw_alert, self.pk_counter)
-            self.pk_counter += 1
-
-            yield transformed
 
         if hits:
             yield self.make_request(page + 1)
