@@ -1,0 +1,37 @@
+{
+  "Avian Influenza": {
+    "severity": "high",
+    "severity_reason": "High mortality risk and potential for severe respiratory failure or systemic complications.",
+    "risk_of_exposure": "low",
+    "exposure_reason": "Requires close contact with infected birds; rare for typical travelers using standard infrastructure.",
+    "confidence": "high"
+  },
+  "Hepatitis E": {
+    "severity": "medium",
+    "severity_reason": "Causes acute liver inflammation; potentially fatal for pregnant women or those with liver conditions.",
+    "risk_of_exposure": "low",
+    "exposure_reason": "Transmitted via contaminated water or undercooked meat; lower risk in standard tourist settings.",
+    "confidence": "high"
+  },
+  "Leptospirosis": {
+    "severity": "medium",
+    "severity_reason": "Can progress to organ failure but often presents as a treatable febrile illness.",
+    "risk_of_exposure": "low",
+    "exposure_reason": "Requires contact with water or soil contaminated by animal urine, unlikely in standard urban travel.",
+    "confidence": "high"
+  },
+  "Measles": {
+    "severity": "medium",
+    "severity_reason": "Significant febrile illness with risks of pneumonia, encephalitis, and secondary infections.",
+    "risk_of_exposure": "high",
+    "exposure_reason": "Highly contagious via respiratory droplets; easily spread in crowded transit hubs and public spaces.",
+    "confidence": "high"
+  },
+  "Myiasis": {
+    "severity": "low",
+    "severity_reason": "Parasitic infestation of tissues; usually causes localized pain and swelling but rarely systemic harm.",
+    "risk_of_exposure": "low",
+    "exposure_reason": "Requires direct contact with specific fly larvae or eggs, uncommon in typical travel environments.",
+    "confidence": "high"
+  }
+}
