@@ -7,21 +7,28 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Alert',
+            name="Alert",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('external_id', models.CharField(max_length=50)),
-                ('date', models.DateField()),
-                ('title', models.TextField()),
-                ('regions', models.JSONField(default=list)),
-                ('diseases', models.JSONField(default=list)),
-                ('species', models.JSONField(default=list)),
-                ('locations', models.JSONField(default=list)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("external_id", models.CharField(max_length=50)),
+                ("date", models.DateField()),
+                ("title", models.TextField()),
+                ("regions", models.JSONField(default=list)),
+                ("diseases", models.JSONField(default=list)),
+                ("species", models.JSONField(default=list)),
+                ("locations", models.JSONField(default=list)),
             ],
         ),
     ]

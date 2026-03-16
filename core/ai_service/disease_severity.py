@@ -15,14 +15,16 @@ ALLOWED_LEVELS = {
     "high": 3,
 }
 
-ALLOWED_LEVELS_REVERSE = {
-    0 : "unknown",
-    1 : "low",
-    2 : "medium",
-    3 : "high"
+ALLOWED_LEVELS_REVERSE = {0: "unknown", 1: "low", 2: "medium", 3: "high"}
+
+data_keys = {
+    "severity",
+    "severity_reason",
+    "risk_of_exposure",
+    "exposure_reason",
+    "confidence",
 }
 
-data_keys = {"severity", "severity_reason", "risk_of_exposure", "exposure_reason", "confidence"}
 
 def extract_disease_names_from_response(response_raw):
     data = json.loads(response_raw)
@@ -30,11 +32,14 @@ def extract_disease_names_from_response(response_raw):
 
     disease_names = set()
     for item in diseases:
-        if isinstance(item, dict) and isinstance(item.get("disease"), str) and item.get("disease").strip():
+        if (
+            isinstance(item, dict)
+            and isinstance(item.get("disease"), str)
+            and item.get("disease").strip()
+        ):
             disease_names.add(item.get("disease").strip())
 
     return disease_names
-
 
 
 def extract_disease_name_from_JSON():
@@ -49,7 +54,6 @@ def extract_disease_name_from_JSON():
     return disease_names
 
 
-
 def need_updates(response_set: set, json_set: set):
     return response_set.difference(json_set)
 
@@ -60,18 +64,16 @@ def initialize_json():
         json.dump(initial_data, f, indent=2)
 
 
-
-
 def validate_response(data, new_disease: set):
     if not isinstance(data, dict):
         return ["Entire response isn't in JSON format"], {}
     err_response = []
 
     correct_data = {}
-    
+
     for disease_name, disease_data in data.items():
-        
-        if not isinstance(disease_name, str) :
+
+        if not isinstance(disease_name, str):
             err_response.append(f"{disease_name} is not a valid str")
             continue
         disease_name = disease_name.strip()
@@ -82,17 +84,22 @@ def validate_response(data, new_disease: set):
             err_response.append(f"{disease_name} is not valid new disease")
             continue
 
-
-        data_keys = {"severity", "severity_reason", "risk_of_exposure", "exposure_reason", "confidence"}
+        data_keys = {
+            "severity",
+            "severity_reason",
+            "risk_of_exposure",
+            "exposure_reason",
+            "confidence",
+        }
 
         if not isinstance(disease_data, dict):
-            err_response.append( f"{disease_name} has no valid data")
+            err_response.append(f"{disease_name} has no valid data")
             continue
-        
+
         clean_keys = True
         for key in disease_data.keys():
             if not isinstance(key, str):
-                err_response.append( f"{disease_name} has key {key} not in str")
+                err_response.append(f"{disease_name} has key {key} not in str")
                 clean_keys = False
                 break
 
@@ -100,7 +107,7 @@ def validate_response(data, new_disease: set):
             continue
 
         if set(key.strip().lower() for key in disease_data.keys()) != data_keys:
-            err_response.append( f"{disease_name} has no enough valid keys in data ")
+            err_response.append(f"{disease_name} has no enough valid keys in data ")
             continue
 
         clean_values = True
@@ -110,16 +117,21 @@ def validate_response(data, new_disease: set):
 
             if normalized_key in {"severity_reason", "exposure_reason"}:
                 if not isinstance(value, str) or not value.strip():
-                    err_response.append( f"{disease_name}.{key} has invalid value: {value!r}")
+                    err_response.append(f"{disease_name}.{key} has invalid value: {
+                            value!r}")
                     clean_values = False
                     break
 
                 normalized_value = value.strip()
 
             else:
-                if not isinstance(value, str) or value.strip().lower() not in ALLOWED_LEVELS.keys():
+                if (
+                    not isinstance(value, str)
+                    or value.strip().lower() not in ALLOWED_LEVELS.keys()
+                ):
                     if not isinstance(value, int) or value < 0 or value >= 4:
-                        err_response.append( f"{disease_name}.{key} has invalid value: {value!r}")
+                        err_response.append(f"{disease_name}.{key} has invalid value: {
+                                value!r}")
                         clean_values = False
                         break
 
@@ -130,21 +142,15 @@ def validate_response(data, new_disease: set):
 
             normalized_data[normalized_key] = normalized_value
 
-
-
         if clean_values:
             correct_data[disease_name] = normalized_data
-        
+
     print(err_response)
-        
 
     return err_response, correct_data
 
-        
 
-
-
-def append_json(update_data, new_disease:set):
+def append_json(update_data, new_disease: set):
     with open(disease_info_json, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -156,10 +162,12 @@ def append_json(update_data, new_disease:set):
         data[disease_name] = disease_value
 
     with open(disease_info_json, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent = 2)
+        json.dump(data, f, indent=2)
 
 
-def generate_disease_severity_entry(response_raw, api_key:str, model_id:str="gemini-3-flash-preview"):
+def generate_disease_severity_entry(
+    response_raw, api_key: str, model_id: str = "gemini-3-flash-preview"
+):
     if not os.path.exists(disease_info_json):
         initialize_json()
 

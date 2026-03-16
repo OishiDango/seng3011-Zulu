@@ -18,6 +18,7 @@ from core.models import Alert
 from core.ai_service.region_summary import generate_summary_entry
 from core.ai_service.disease_severity import generate_disease_severity_entry
 
+
 def filter_alerts(params, default_days=365):
     alert_id = params.get("id")
     from_date = params.get("from")
@@ -207,31 +208,22 @@ def stats_timeseries(request):
 
     if interval not in trunc_map:
         return Response(
-            {"error": "Invalid interval"},
-            status=status.HTTP_400_BAD_REQUEST
+            {"error": "Invalid interval"}, status=status.HTTP_400_BAD_REQUEST
         )
 
-    queryset, from_date, to_date = filter_alerts(
-        request.query_params,
-        default_days=90
-    )
+    queryset, from_date, to_date = filter_alerts(request.query_params, default_days=90)
 
     trunc_func = trunc_map[interval]
 
     series = (
-        queryset
-        .annotate(period=trunc_func("date"))
+        queryset.annotate(period=trunc_func("date"))
         .values("period")
         .annotate(count=Count("id"))
         .order_by("period")
     )
 
     results = [
-        {
-            "period": row["period"].isoformat(),
-            "count": row["count"]
-        }
-        for row in series
+        {"period": row["period"].isoformat(), "count": row["count"]} for row in series
     ]
 
     return Response(
@@ -241,11 +233,11 @@ def stats_timeseries(request):
             "to": to_date.isoformat() if to_date else None,
             "results": results,
         },
-        status=status.HTTP_200_OK
+        status=status.HTTP_200_OK,
     )
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def simple_scrapy_test(request):
     scraper_path = os.path.join(os.getcwd(), "scraper")
 
@@ -263,6 +255,7 @@ def simple_scrapy_test(request):
         return Response(
             {"error": "Scrapy failed", "detail": e.output.decode()}, status=500
         )
+
 
 def serialise_alert_for_ai(alert):
     return {

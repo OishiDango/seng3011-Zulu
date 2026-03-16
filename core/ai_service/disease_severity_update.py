@@ -1,63 +1,58 @@
-import os
 import json
-import datetime
 from google import genai
 from google.genai import types
-
 
 # PORT = "7800"
 # os.environ['http_proxy'] = f"http://127.0.0.1:{PROXY_PORT}"
 # os.environ['https_proxy'] = f"http://127.0.0.1:{PROXY_PORT}"
 
 
-
-
 class GeminiService:
     response_schema = {
         "type": "object",
         "minProperties": 1,
-                "additionalProperties": {
-                    "type": "object",
-                    "properties": {
-                        "severity": {
-                            "type": "integer",
-                            "minimum": 0,
-                            "maximum": 3,
-                            "description": "Potential clinical impact and health damage to an individual upon infection, ranging from mild symptoms (1) to life-threatening conditions (3), (0) for unkown."
-                        },
-                        "severity_reason" : {
-                            "type": "string",
-                            "description": "A very brief reason for the severity score, under 20 words."
-                        },
-                        "risk_of_exposure": {
-                            "type": "integer",
-                            "minimum": 0,
-                            "maximum": 3,
-                            "description": "General likelihood of a traveler contracting the disease based on its transmission mode and inherent contagiousness (1=Low, 2=Medium, 3=High), (0) for unkown."
-
-                        },
-                        "exposure_reason" : {
-                            "type": "string",
-                            "description": "A very brief reason for the risk_of_exposure score, under 20 words."
-                        },
-                        "confidence": {
-                            "type": "integer",
-                            "minimum": 0,
-                            "maximum": 3,
-                            "description": "The degree of certainty in the overall assessment, reflecting the alignment with authoritative medical guidelines (1=Low, 2=Medium, 3=High), (0) for unkown."
-                        }
-                    },
-                    "required": [
-                        "severity",
-                        "severity_reason",
-                        "risk_of_exposure",
-                        "exposure_reason",
-                        "confidence"
-                    ],
-                    "additionalProperties": False
-                }
+        "additionalProperties": {
+            "type": "object",
+            "properties": {
+                "severity": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 3,
+                    "description": "Potential clinical impact and health damage to an individual upon infection, ranging from mild symptoms (1) to life-threatening conditions (3), (0) for unkown.",
+                },
+                "severity_reason": {
+                    "type": "string",
+                    "description": "A very brief reason for the severity score, under 20 words.",
+                },
+                "risk_of_exposure": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 3,
+                    "description": "General likelihood of a traveler contracting the disease based on its transmission mode and inherent contagiousness (1=Low, 2=Medium, 3=High), (0) for unkown.",
+                },
+                "exposure_reason": {
+                    "type": "string",
+                    "description": "A very brief reason for the risk_of_exposure score, under 20 words.",
+                },
+                "confidence": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 3,
+                    "description": "The degree of certainty in the overall assessment, reflecting the alignment with authoritative medical guidelines (1=Low, 2=Medium, 3=High), (0) for unkown.",
+                },
+            },
+            "required": [
+                "severity",
+                "severity_reason",
+                "risk_of_exposure",
+                "exposure_reason",
+                "confidence",
+            ],
+            "additionalProperties": False,
+        },
     }
-    def __init__ (self, api_key:str, model_id:str):
+
+    def __init__(self, api_key: str, model_id: str):
         if not api_key:
             raise ValueError("API key is missing.")
         self.api_key = api_key
@@ -66,13 +61,13 @@ class GeminiService:
 
     def disease_assessment(self, disease: set):
 
-        prompt =""" 
+        prompt = """
             You are assessing infectious disease risk for an airport-oriented travel safety service for short- and medium-term visitors, You assessments must base on general authoritative medical/public health knowledge and be completely objective.
             Assume customers are likely to move through airports, public transport, hotels, tourist sites and other shared public infrastructure that can be moderately crowded or crowded.
             Do not Assume visitors stay at home most of the time. Do not assume they remain only in major urban areas.
             Do not assume unusual occupational, agricultural, or long term community exposure.
             For each disease mentioned, return their severity, severity_reason, risk_of_exposure, exposure_reason, confidence.            Assess each disease from the perspective of a typical short- to medium-term traveler. Assume the disease is present at the destination.
-            
+
             Assessment rubrics:
             Severity measures the likely clinical impact on an individual if infected. Consider factors such as typical symptom burden, risk of complications, likelihood of needing medical care or hospitalization, potential long-term harm, and mortality risk.
             0 = Unknown
@@ -97,28 +92,27 @@ class GeminiService:
 
             Schema:
                 """
-        
+
         diseases_list = ", ".join(sorted(disease))
-        
-        schema_str = json.dumps(self.response_schema, indent = 2)
+
+        schema_str = json.dumps(self.response_schema, indent=2)
 
         full_prompt = prompt + schema_str + f"\n\nDiseases to assess: {diseases_list}"
         try:
             response = self.client.models.generate_content(
-                model = self.model_id,
-                contents = full_prompt,
-                config = types.GenerateContentConfig(
-                    response_json_schema = self.response_schema,
-                    response_mime_type= "application/json",
-                    temperature=0.2
-                )
+                model=self.model_id,
+                contents=full_prompt,
+                config=types.GenerateContentConfig(
+                    response_json_schema=self.response_schema,
+                    response_mime_type="application/json",
+                    temperature=0.2,
+                ),
             )
             print(response.parsed)
             return response.parsed
-        
+
         except Exception as e:
             raise RuntimeError(f"{self.model_id} request crashed: {e}")
-        
 
 
 # if __name__ == "__main__":

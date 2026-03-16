@@ -45,8 +45,7 @@ class TestsStatsDiseases(APITestCase):
         self.assertEqual(response.data["to"], "2026-03-12")
 
         disease_counts = {
-            item["disease"]: item["count"]
-            for item in response.data["by_disease"]
+            item["disease"]: item["count"] for item in response.data["by_disease"]
         }
 
         self.assertEqual(
@@ -66,8 +65,7 @@ class TestsStatsDiseases(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         disease_counts = {
-            item["disease"]: item["count"]
-            for item in response.data["by_disease"]
+            item["disease"]: item["count"] for item in response.data["by_disease"]
         }
 
         self.assertEqual(
@@ -91,8 +89,7 @@ class TestsStatsDiseases(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         disease_counts = {
-            item["disease"]: item["count"]
-            for item in response.data["by_disease"]
+            item["disease"]: item["count"] for item in response.data["by_disease"]
         }
 
         self.assertEqual(
@@ -118,8 +115,7 @@ class TestsStatsDiseases(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         disease_counts = {
-            item["disease"]: item["count"]
-            for item in response.data["by_disease"]
+            item["disease"]: item["count"] for item in response.data["by_disease"]
         }
 
         self.assertEqual(
@@ -150,8 +146,7 @@ class TestsStatsDiseases(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         disease_counts = {
-            item["disease"]: item["count"]
-            for item in response.data["by_disease"]
+            item["disease"]: item["count"] for item in response.data["by_disease"]
         }
 
         # includes New Mexico because location uses icontains
@@ -219,8 +214,7 @@ class TestsStatsDiseases(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         disease_counts = {
-            item["disease"]: item["count"]
-            for item in response.data["by_disease"]
+            item["disease"]: item["count"] for item in response.data["by_disease"]
         }
 
         self.assertEqual(

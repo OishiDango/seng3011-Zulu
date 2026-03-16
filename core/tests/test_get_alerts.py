@@ -210,10 +210,19 @@ class TestsGetAlerts(APITestCase):
         returned_ids = {alert["id"] for alert in response.data["alerts"]}
         self.assertEqual(
             returned_ids,
-            {"8721537", "8720687", "8720621",
-             "8720357", "8720318", "8720063",
-             "8720061", "8719909", "8719386",
-             "8719727", "8716456"},
+            {
+                "8721537",
+                "8720687",
+                "8720621",
+                "8720357",
+                "8720318",
+                "8720063",
+                "8720061",
+                "8719909",
+                "8719386",
+                "8719727",
+                "8716456",
+            },
         )
 
     def test_get_alerts_filters_by_date_range(self):
