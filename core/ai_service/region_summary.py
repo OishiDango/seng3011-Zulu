@@ -169,7 +169,7 @@ def filter_entry(
     location_chain: list | None = None,
     location_str: str | None = None,
     database: list | None = None,
-) -> tuple[list, list]:
+) -> tuple[list, list|None]:
 
     if not database:
         raise ValueError("database is required")
