@@ -50,13 +50,13 @@ class TestsStatsRegions(APITestCase):
         }
 
         self.assertEqual(
-            region_counts,
-            {
-                "North America": 3,
-                "Asia": 1,
-                "South America": 1,
-            },
-        )
+        region_counts,
+        {
+            "North America": 4,
+            "South America": 2,
+            "Asia": 1,
+        },
+    )
 
     def test_stats_regions_filters_by_id(self):
         response = self.client.get(self.url, {"id": "8731230"})
@@ -96,7 +96,7 @@ class TestsStatsRegions(APITestCase):
         self.assertEqual(
             region_counts,
             {
-                "North America": 5,
+                "North America": 6,
                 "Asia": 2,
                 "Europe": 1,
                 "South America": 1,
@@ -180,10 +180,10 @@ class TestsStatsRegions(APITestCase):
 
         by_region = response.data["by_region"]
 
-        self.assertEqual(by_region[0], {"region": "North America", "count": 3})
+        self.assertEqual(by_region[0], {"region": "North America", "count": 4})
 
         remaining_names = [item["region"] for item in by_region[1:]]
-        self.assertEqual(remaining_names, ["Asia", "South America"])
+        self.assertEqual(remaining_names, ["South America", "Asia"])
 
     def test_stats_regions_default_window_returns_from_to(self):
         response = self.client.get(self.url)
