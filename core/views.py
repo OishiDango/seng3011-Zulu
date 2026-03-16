@@ -14,7 +14,7 @@ from rest_framework import status
 
 from core.models import Alert
 from core.ai_service.region_summary import generate_summary_entry
-
+from core.ai_service.disease_severity import generate_disease_severity_entry
 
 def filter_alerts(params, default_days=365):
     alert_id = params.get("id")
@@ -135,12 +135,30 @@ def stats_diseases(request):
         )
     ]
 
+    response_data = {
+        "from": from_date.isoformat() if from_date else None,
+        "to": to_date.isoformat() if to_date else None,
+        "by_disease": by_disease,
+    }
+
+    try:
+        update_result = generate_disease_severity_entry(
+            response_raw=response_data,
+            api_key=os.getenv("GEMINI_API_KEY"),
+        )
+        response_data["new_disease"] = update_result["new_disease"]
+        response_data["updated_disease"] = update_result["updated_disease"]
+
+        if update_result["errors"]:
+            response_data["severity_update_errors"] = update_result["errors"]
+
+    except ValueError as e:
+        response_data["severity_update_errors"] = [str(e)]
+    except RuntimeError as e:
+        response_data["severity_update_errors"] = [str(e)]
+
     return Response(
-        {
-            "from": from_date.isoformat() if from_date else None,
-            "to": to_date.isoformat() if to_date else None,
-            "by_disease": by_disease,
-        },
+        response_data,
         status=status.HTTP_200_OK,
     )
 

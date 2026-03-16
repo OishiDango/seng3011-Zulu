@@ -1,7 +1,12 @@
 import json
+import os
 
+from .disease_severity_update import GeminiService
+from pathlib import Path
 
-disease_info_json = "disease_info.json"
+BASE_DIR = Path(__file__).resolve().parent
+
+disease_info_json = BASE_DIR / "disease_info.json"
 
 ALLOWED_LEVELS = {
     "unknown": 0,
@@ -17,7 +22,7 @@ ALLOWED_LEVELS_REVERSE = {
     3 : "high"
 }
 
-data_keys = {"severity", "risk_of_exposure", "confidence"}
+data_keys = {"severity", "severity_reason", "risk_of_exposure", "exposure_reason", "confidence"}
 
 def extract_disease_names_from_response(response_raw):
     data = json.loads(response_raw)
@@ -59,7 +64,7 @@ def initialize_json():
 
 def validate_response(data, new_disease: set):
     if not isinstance(data, dict):
-        return ["Entire response isn't in JSON format"], []
+        return ["Entire response isn't in JSON format"], {}
     err_response = []
 
     correct_data = {}
@@ -78,7 +83,7 @@ def validate_response(data, new_disease: set):
             continue
 
 
-        data_keys = {"severity", "risk_of_exposure", "confidence"}
+        data_keys = {"severity", "severity_reason", "risk_of_exposure", "exposure_reason", "confidence"}
 
         if not isinstance(disease_data, dict):
             err_response.append( f"{disease_name} has no valid data")
@@ -101,17 +106,27 @@ def validate_response(data, new_disease: set):
         clean_values = True
         normalized_data = {}
         for key, value in disease_data.items():
-            if not isinstance(value, str) or value.strip().lower() not in ALLOWED_LEVELS.keys():
-                if not isinstance(value, int) or value < 0 or value >= 4:
+            normalized_key = key.strip().lower()
+
+            if normalized_key in {"severity_reason", "exposure_reason"}:
+                if not isinstance(value, str) or not value.strip():
                     err_response.append( f"{disease_name}.{key} has invalid value: {value!r}")
                     clean_values = False
                     break
 
-            normalized_key = key.strip().lower()
-            if isinstance(value, str):
-                normalized_value = value.strip().lower()
+                normalized_value = value.strip()
+
             else:
-                normalized_value = ALLOWED_LEVELS_REVERSE[value]
+                if not isinstance(value, str) or value.strip().lower() not in ALLOWED_LEVELS.keys():
+                    if not isinstance(value, int) or value < 0 or value >= 4:
+                        err_response.append( f"{disease_name}.{key} has invalid value: {value!r}")
+                        clean_values = False
+                        break
+
+                if isinstance(value, str):
+                    normalized_value = value.strip().lower()
+                else:
+                    normalized_value = ALLOWED_LEVELS_REVERSE[value]
 
             normalized_data[normalized_key] = normalized_value
 
@@ -143,5 +158,35 @@ def append_json(update_data, new_disease:set):
     with open(disease_info_json, "w", encoding="utf-8") as f:
         json.dump(data, f, indent = 2)
 
-    
 
+def generate_disease_severity_entry(response_raw, api_key:str, model_id:str="gemini-3-flash-preview"):
+    if not os.path.exists(disease_info_json):
+        initialize_json()
+
+    if isinstance(response_raw, dict):
+        response_raw = json.dumps(response_raw)
+
+    response_set = extract_disease_names_from_response(response_raw)
+    json_set = extract_disease_name_from_JSON()
+    new_disease = need_updates(response_set, json_set)
+
+    if not new_disease:
+        return {
+            "new_disease": [],
+            "updated_disease": [],
+            "errors": [],
+        }
+
+    AI = GeminiService(api_key, model_id=model_id)
+    update_data = AI.disease_assessment(new_disease)
+
+    err_response, correct_data = validate_response(update_data, new_disease)
+
+    if correct_data:
+        append_json(json.dumps(correct_data), new_disease)
+
+    return {
+        "new_disease": sorted(new_disease),
+        "updated_disease": sorted(correct_data.keys()),
+        "errors": err_response,
+    }

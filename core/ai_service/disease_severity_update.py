@@ -71,8 +71,7 @@ class GeminiService:
             Assume customers are likely to move through airports, public transport, hotels, tourist sites and other shared public infrastructure that can be moderately crowded or crowded.
             Do not Assume visitors stay at home most of the time. Do not assume they remain only in major urban areas.
             Do not assume unusual occupational, agricultural, or long term community exposure.
-            For each disease mentioned, return their severity, risk_of_exposure, confidence. Return the result strictly in valid JSON matching the provided schema.
-            Assess each disease from the perspective of a typical short- to medium-term traveler. Assume the disease is present at the destination.
+            For each disease mentioned, return their severity, severity_reason, risk_of_exposure, exposure_reason, confidence.            Assess each disease from the perspective of a typical short- to medium-term traveler. Assume the disease is present at the destination.
             
             Assessment rubrics:
             Severity measures the likely clinical impact on an individual if infected. Consider factors such as typical symptom burden, risk of complications, likelihood of needing medical care or hospitalization, potential long-term harm, and mortality risk.
@@ -94,8 +93,7 @@ class GeminiService:
             Use 0 when the information is insufficient for a meaningful judgment.
             Do not default to 3, you are allowed to be not confident
 
-            Use each disease name as a top-level JSON key. Each disease must map to an object containing exactly: severity, risk_of_exposure, and confidence.
-            Return only valid JSON matching the required schema.
+            Use each disease name as a top-level JSON key. Each disease must map to an object containing exactly: severity, severity_reason, risk_of_exposure, exposure_reason, confidence.            Return only valid JSON matching the required schema.
 
             Schema:
                 """
@@ -123,11 +121,11 @@ class GeminiService:
         
 
 
-if __name__ == "__main__":
-    AI = GeminiService(API_KEY, model_id="gemini-3-flash-preview")
-    # AI = GeminiService(API_KEY, model_id="gemini-3.1-pro-preview")
-    while True:
-        user_input = input("\ninput diseases:")
-        diseases = set(user_input.split())
-        print(diseases)
-        AI.disease_assessment(diseases)
+# if __name__ == "__main__":
+#     AI = GeminiService(API_KEY, model_id="gemini-3-flash-preview")
+#     # AI = GeminiService(API_KEY, model_id="gemini-3.1-pro-preview")
+#     while True:
+#         user_input = input("\ninput diseases:")
+#         diseases = set(user_input.split())
+#         print(diseases)
+#         AI.disease_assessment(diseases)
