@@ -50,13 +50,13 @@ class TestsStatsRegions(APITestCase):
         }
 
         self.assertEqual(
-        region_counts,
-        {
-            "North America": 4,
-            "South America": 2,
-            "Asia": 1,
-        },
-    )
+            region_counts,
+            {
+                "North America": 4,
+                "South America": 2,
+                "Asia": 1,
+            },
+        )
 
     def test_stats_regions_filters_by_id(self):
         response = self.client.get(self.url, {"id": "8731230"})
