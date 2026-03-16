@@ -51,9 +51,12 @@ def sort_database(database: list):
     return sorted(database, key=lambda a: a["fields"]["date"], reverse=True)
 
 
-def find_by_every_location(database: list, location_str: str) -> list:
+def find_by_every_location(database: list, location_str: str | None) -> list:
     chains = []
 
+    if not location_str:
+        return []
+    
     for alert in database:
         location = alert["fields"]["locations"]
 
@@ -165,8 +168,8 @@ def filter_entry(
     start_date: date | None = None,
     location_chain: list | None = None,
     location_str: str | None = None,
-    database: list = None,
-) -> list:
+    database: list | None = None,
+) -> tuple[list, list]:
 
     if not database:
         raise ValueError("database is required")
@@ -249,6 +252,10 @@ def generate_summary_entry(
     diseases = extract_disease_name_from_result(result)
 
     API_KEY = os.getenv("GEMINI_API_KEY")
+    if API_KEY is None:
+        return {
+            "error": "API KEY is Missing"
+        }
 
     AI = region_summary_api.GeminiSummary(API_KEY, model_id="gemini-3-flash-preview")
     response = AI.region_summary(result, location_chain, diseases)
