@@ -28,15 +28,15 @@ def filter_alerts(params, default_days=365):
 
     today = date.today()
 
-    if from_date:
-        from_date = parse_date(from_date)
-    else:
-        from_date = today - timedelta(days=90)
-
     if to_date:
         to_date = parse_date(to_date)
     else:
         to_date = today
+
+    if from_date:
+        from_date = parse_date(from_date)
+    else:
+        from_date = to_date - timedelta(days=default_days)
 
     query_set = Alert.objects.all().order_by("-date")
 
@@ -150,9 +150,9 @@ def get_alerts(request):
 
     return Response(
         {
-            "alerts": alerts_out,
             "from": from_date.isoformat() if from_date else None,
             "to": to_date.isoformat() if to_date else None,
+            "alerts": alerts_out,
         },
         status=status.HTTP_200_OK,
     )
