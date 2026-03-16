@@ -13,12 +13,19 @@ API_KEY = "AIzaSyCa6LB5tin7aK604YEsL9M3wQedlLptmE8"
 class GeminiSummary:
     response_schema = {
         "type": "object",
-        "description": "Structured travel-risk summary based only on the provided outbreak alerts and disease metadata for the requested location context",
+        "description": (
+            "Structured travel-risk summary based only on the provided"
+            " outbreak alerts and disease metadata for the requested location context"
+        ),
         "additionalProperties": False,
         "properties": {
             "overall_assessment": {
                 "type": "object",
-                "description": "High-level assessment for the requested location. This should give the main travel-risk picture in a short paragraph and explain the overall level briefly and objectively",
+                "description": (
+                    "High-level assessment for the requested location. "
+                    "This should give the main travel-risk picture in a short"
+                    " paragraph and explain the overall level briefly and objectively"
+                ),
                 "additionalProperties": False,
                 "properties": {
                     "location": {
@@ -29,16 +36,35 @@ class GeminiSummary:
                     },
                     "summary": {
                         "type": "string",
-                        "description": "A concise but slightly detailed summary paragraph for the requested location It should synthesize recent/repeated alert signals, disease metadata, and travel relevance for short- and medium-term visitors",
+                        "description": (
+                            "A concise but slightly detailed summary paragraph"
+                            " for the requested location It should synthesize "
+                            "recent/repeated alert signals, disease metadata, "
+                            "and travel relevance for short- and medium-term visitors"
+                        ),
                     },
                     "overall_risk_level": {
                         "type": "string",
-                        "description": "Overall travel-risk level for the requested location based only on the provided alerts and disease metadata: choose High if there is any recent alert with high severity or high exposure, or if there are multiple recent alerts; choose Medium if these conditions are met but the alerts are not recent; choose Low if there are no alerts, or if the alerts are not recent and do not involve high severity or high exposure.",
+                        "description": (
+                            "Overall travel-risk level for the requested "
+                            "location based only on the provided alerts "
+                            "and disease metadata: choose High if there is any recent"
+                            " alert with high severity or high exposure, or if there "
+                            "are multiple recent alerts; choose Medium if these "
+                            "conditions are met but the alerts are not recent; choose "
+                            "Low if there are no alerts, or if the alerts are not"
+                            " recent and do not involve high severity or high exposure."
+                        ),
                         "enum": ["high", "medium", "low"],
                     },
                     "key_reasons": {
                         "type": "array",
-                        "description": "Main reasons supporting the overall assessment, you should mention concrete drivers such as recency, repeated alerts, strong exposure relevance, or strong severity relevance",
+                        "description": (
+                            "Main reasons supporting the overall assessment, "
+                            "you should mention concrete drivers such as recency,"
+                            " repeated alerts, strong exposure relevance, or strong "
+                            "severity relevance"
+                        ),
                         "items": {"type": "string"},
                         "minItems": 1,
                         "maxItems": 4,
@@ -53,7 +79,10 @@ class GeminiSummary:
             },
             "major_threats": {
                 "type": "object",
-                "description": "Current main threats for the requested location in the travel context.",
+                "description": (
+                    "Current main threats for the requested "
+                    "location in the travel context."
+                ),
                 "additionalProperties": False,
                 "properties": {
                     "high_exposure": {
@@ -69,7 +98,9 @@ class GeminiSummary:
             },
             "potential_threats": {
                 "type": "object",
-                "description": "Relevant but less central threats for the requested location.",
+                "description": (
+                    "Relevant but less central threats " "for the requested location."
+                ),
                 "additionalProperties": False,
                 "properties": {
                     "high_exposure": {
@@ -93,7 +124,10 @@ class GeminiSummary:
             },
             "ignored_alerts": {
                 "type": "array",
-                "description": "Alerts ignored only because they are clearly outside the requested location context.",
+                "description": (
+                    "Alerts ignored only because they are "
+                    "clearly outside the requested location context."
+                ),
                 "items": {
                     "type": "object",
                     "additionalProperties": False,
@@ -142,7 +176,9 @@ class GeminiSummary:
     ):
 
         prompt = f"""
-            You are assessing infectious disease risk for an airport-oriented travel safety service for short- and medium-term visitors, You assessments must base on alert and diseases information provided below as list.
+            You are assessing infectious disease risk for an airport-oriented travel
+              safety service for short- and medium-term visitors, You assessments must
+              base on alert and diseases information provided below as list.
 
             Summarize base on the provided outbreak alerts and the provided disease metadata, DO NOT RESEARCH.
             Do not use web search, external sources, tools, or unstated medical facts.

@@ -71,11 +71,11 @@ def find_by_every_location(database: list, location_str: str) -> list:
     unique = set()
     result = []
 
-    for l in chains:
-        chain = ">".join(l)
+    for a in chains:
+        chain = ">".join(a)
         if chain not in unique:
             unique.add(chain)
-            result.append(l)
+            result.append(a)
 
     return result
 
