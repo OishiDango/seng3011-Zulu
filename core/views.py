@@ -90,18 +90,33 @@ def serialise_alert(alert):
 
 @api_view(["GET"])
 def stats_regions(request):
-    query_set, from_date, to_date = filter_alerts(request.query_params, default_days=30)
+    query_set, from_date, to_date = filter_alerts(
+        request.query_params,
+        default_days=30,
+    )
+
+    requested_regions = request.query_params.getlist("region")
+    requested_regions_lower = {r.lower() for r in requested_regions if r}
 
     region_counter = Counter()
 
     for alert in query_set:
         for region in alert.regions or []:
-            if region:
+            if not region:
+                continue
+
+            if requested_regions_lower:
+                if region.lower() in requested_regions_lower:
+                    region_counter[region] += 1
+            else:
                 region_counter[region] += 1
 
     by_region = [
         {"region": region, "count": count}
-        for region, count in sorted(region_counter.items(), key=lambda x: (-x[1], x[0]))
+        for region, count in sorted(
+            region_counter.items(),
+            key=lambda x: (-x[1], x[0]),
+        )
     ]
 
     return Response(
