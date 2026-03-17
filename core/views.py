@@ -29,15 +29,15 @@ def filter_alerts(params, default_days=365):
 
     today = date.today()
 
-    if from_date:
-        from_date = parse_date(from_date)
-    else:
-        from_date = today - timedelta(days=90)
-
     if to_date:
         to_date = parse_date(to_date)
     else:
         to_date = today
+
+    if from_date:
+        from_date = parse_date(from_date)
+    else:
+        from_date = to_date - timedelta(days=default_days)
 
     query_set = Alert.objects.all().order_by("-date")
 
@@ -51,16 +51,22 @@ def filter_alerts(params, default_days=365):
         query_set = query_set.filter(date__lte=to_date)
 
     if diseases:
+        disease_query = Q()
         for d in diseases:
-            query_set = query_set.filter(diseases__icontains=d)
+            disease_query |= Q(diseases__icontains=d)
+        query_set = query_set.filter(disease_query)
 
     if species:
+        species_query = Q()
         for s in species:
-            query_set = query_set.filter(species__icontains=s)
+            species_query |= Q(species__icontains=s)
+        query_set = query_set.filter(species_query)
 
     if regions:
+        region_query = Q()
         for r in regions:
-            query_set = query_set.filter(regions__icontains=r)
+            region_query |= Q(regions__icontains=r)
+        query_set = query_set.filter(region_query)
 
     if locations:
         location_query = Q()
@@ -111,13 +117,25 @@ def stats_regions(request):
 
 @api_view(["GET"])
 def stats_diseases(request):
-    query_set, from_date, to_date = filter_alerts(request.query_params, default_days=30)
+    query_set, from_date, to_date = filter_alerts(
+        request.query_params,
+        default_days=30,
+    )
+
+    requested_diseases = request.query_params.getlist("disease")
+    requested_diseases_lower = {d.lower() for d in requested_diseases if d}
 
     disease_counter = Counter()
 
     for alert in query_set:
         for disease in alert.diseases or []:
-            if disease:
+            if not disease:
+                continue
+
+            if requested_diseases_lower:
+                if disease.lower() in requested_diseases_lower:
+                    disease_counter[disease] += 1
+            else:
                 disease_counter[disease] += 1
 
     by_disease = [
@@ -169,9 +187,9 @@ def get_alerts(request):
 
     return Response(
         {
-            "alerts": alerts_out,
             "from": from_date.isoformat() if from_date else None,
             "to": to_date.isoformat() if to_date else None,
+            "alerts": alerts_out,
         },
         status=status.HTTP_200_OK,
     )
