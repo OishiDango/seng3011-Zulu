@@ -1,45 +1,72 @@
 import json
+from pathlib import Path
+
 from django.core.management.base import BaseCommand
 from core.models import Alert
 
 
 class Command(BaseCommand):
-    help = "Import alerts from a JSON file"
+    help = "Import alerts from a Django fixture-style JSON file"
 
     def add_arguments(self, parser):
-        parser.add_argument("file", type=str)
+        parser.add_argument(
+            "--file",
+            type=str,
+            default="alerts.json",
+            help="Path to alerts JSON file",
+        )
 
     def handle(self, *args, **options):
-        file_path = options["file"]
+        file_path = Path(options["file"])
 
-        with open(file_path, "r", encoding="utf-8") as f:
+        if not file_path.exists():
+            self.stderr.write(self.style.ERROR(f"File not found: {file_path}"))
+            return
+
+        with file_path.open("r", encoding="utf-8") as f:
             data = json.load(f)
 
+        batch = []
         created = 0
-        updated = 0
+        skipped = 0
+
+        existing_ids = set(
+            Alert.objects.values_list("external_id", flat=True)
+        )
 
         for item in data:
-            fields = item["fields"]
+            fields = item.get("fields", {})
+            external_id = fields.get("external_id")
 
-            obj, was_created = Alert.objects.update_or_create(
-                external_id=fields["external_id"],
-                defaults={
-                    "date": fields["date"],
-                    "title": fields["title"],
-                    "diseases": fields["diseases"],
-                    "species": fields["species"],
-                    "regions": fields["regions"],
-                    "locations": fields["locations"],
-                },
+            if not external_id or external_id in existing_ids:
+                skipped += 1
+                continue
+
+            batch.append(
+                Alert(
+                    external_id=external_id,
+                    date=fields.get("date"),
+                    title=fields.get("title", ""),
+                    diseases=fields.get("diseases", []),
+                    species=fields.get("species", []),
+                    regions=fields.get("regions", []),
+                    locations=fields.get("locations", []),
+                )
             )
+            existing_ids.add(external_id)
 
-            if was_created:
-                created += 1
-            else:
-                updated += 1
+            if len(batch) >= 1000:
+                Alert.objects.bulk_create(batch, batch_size=1000)
+                created += len(batch)
+                self.stdout.write(f"Inserted {created} alerts...")
+                batch = []
+
+        if batch:
+            Alert.objects.bulk_create(batch, batch_size=1000)
+            created += len(batch)
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Import complete: {created} created, {updated} updated"
+                f"Import complete. Created: {created}, skipped: {skipped}"
             )
         )
