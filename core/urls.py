@@ -4,7 +4,6 @@ from .views import get_alerts, stats_regions, stats_timeseries
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("search-def/", views.simple_scrapy_test, name="search_def"),
     path("alerts/", get_alerts, name="alerts"),
     path("stats/timeseries/", stats_timeseries, name="stats_timeseries"),
     path("stats/regions/", stats_regions, name="stats_regions"),
