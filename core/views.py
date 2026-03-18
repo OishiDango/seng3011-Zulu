@@ -9,6 +9,7 @@ from datetime import date, timedelta
 from django.db.models import Q
 from django.utils.dateparse import parse_date
 from django.db.models.functions import TruncDay, TruncWeek, TruncMonth
+from django.http import JsonResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -88,6 +89,10 @@ def serialise_alert(alert):
         "region": alert.regions,
         "location": alert.locations,
     }
+
+
+def home(request):
+    return JsonResponse({"message": "Zulu API is running"})
 
 
 @api_view(["GET"])

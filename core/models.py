@@ -7,8 +7,8 @@ from django.db import models
 
 
 class Alert(models.Model):
-    external_id = models.CharField(max_length=50)
-    date = models.DateField()
+    external_id = models.CharField(max_length=50, unique=True, db_index=True)
+    date = models.DateField(db_index=True)
     title = models.TextField()
     regions = models.JSONField(default=list)
     diseases = models.JSONField(default=list)

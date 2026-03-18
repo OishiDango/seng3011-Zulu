@@ -15,7 +15,7 @@ class PromedSpider(scrapy.Spider):
         "LOG_LEVEL": "INFO",
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, mode="backfill", max_pages=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         key_path = Path("promed_key.txt")
@@ -27,6 +27,23 @@ class PromedSpider(scrapy.Spider):
             raise ValueError("promed_key.txt is empty.")
 
         self.item_count = 0
+        self.mode = mode.lower()
+
+        if self.mode not in {"backfill", "incremental"}:
+            raise ValueError("mode must be either 'backfill' or 'incremental'.")
+
+        if max_pages is not None:
+            self.max_pages = int(max_pages)
+        elif self.mode == "incremental":
+            self.max_pages = 5
+        else:
+            self.max_pages = None
+
+        self.logger.info(
+            "Spider started with mode=%s, max_pages=%s",
+            self.mode,
+            self.max_pages,
+        )
 
     def start_requests(self):
         yield self.make_request(page=1)
@@ -134,16 +151,31 @@ class PromedSpider(scrapy.Spider):
             return None
         return datetime.fromtimestamp(timestamp, UTC).date().isoformat()
 
+    def should_continue(self, page, hits):
+        if not hits:
+            self.logger.info("Stopping: no more hits on page %s", page)
+            return False
+
+        if self.max_pages is not None and page >= self.max_pages:
+            self.logger.info(
+                "Stopping: reached max_pages=%s in %s mode",
+                self.max_pages,
+                self.mode,
+            )
+            return False
+
+        return True
+
     def parse(self, response, page):
         if response.status != 200:
-            self.logger.error(f"Page {page} failed with status {response.status}")
+            self.logger.error("Page %s failed with status %s", page, response.status)
             self.logger.error(response.text)
             return
 
         data = json.loads(response.text)
         hits = data["results"][0].get("hits", [])
 
-        self.logger.info(f"Page {page}: scraped {len(hits)} alerts")
+        self.logger.info("Page %s: scraped %s alerts", page, len(hits))
 
         for hit in hits:
             doc = hit["document"]
@@ -159,7 +191,10 @@ class PromedSpider(scrapy.Spider):
             date = self.format_date(doc.get("issue_date"))
 
             self.logger.info(
-                f"data #{self.item_count} | page={page} | alert_id={external_id}"
+                "data #%s | page=%s | alert_id=%s",
+                self.item_count,
+                page,
+                external_id,
             )
 
             yield {
@@ -176,5 +211,5 @@ class PromedSpider(scrapy.Spider):
                 },
             }
 
-        if hits:
+        if self.should_continue(page, hits):
             yield self.make_request(page + 1)

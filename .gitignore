@@ -1,18 +1,51 @@
-# Python 编译缓存
+# ----------------------
+# Python
+# ----------------------
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# 虚拟环境（非常重要，绝对不要传这个）
+# ----------------------
+# Django
+# ----------------------
+db.sqlite3
+staticfiles/
+
+# ----------------------
+# Environment / secrets
+# ----------------------
+.env
+*.env
+promed_key.txt
+
+# ----------------------
+# Virtual environments
+# ----------------------
 venv/
 .venv/
 env/
 
-# 数据库文件
-db.sqlite3
+# ----------------------
+# Testing / coverage
+# ----------------------
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
 
-# VS Code 配置
+# ----------------------
+# VS Code
+# ----------------------
 .vscode/
 
-# 操作系统临时文件
+# ----------------------
+# OS files
+# ----------------------
 .DS_Store
 Thumbs.db
+
+# ----------------------
+# Logs
+# ----------------------
+*.log
