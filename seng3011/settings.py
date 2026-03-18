@@ -8,11 +8,6 @@ SECRET_KEY = os.environ.get(
     "dev-only-secret",
 )
 
-REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 50,
-}
-
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
