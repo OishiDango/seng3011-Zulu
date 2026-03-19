@@ -361,6 +361,7 @@ def region_summary_view(request):
     window = request.query_params.get("window")
     raw_from = request.query_params.get("from")
     raw_to = request.query_params.get("to")
+    limit = int(request.query_params.get("limit", 200))
 
     if not location:
         return Response(
@@ -383,7 +384,7 @@ def region_summary_view(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    query_set = Alert.objects.all().order_by("-date")
+    query_set = Alert.objects.all().order_by("-date")[:limit]
     database = [serialise_alert_for_ai(alert) for alert in query_set]
 
     try:
