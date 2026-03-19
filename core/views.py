@@ -339,8 +339,6 @@ def stats_timeseries(request):
         },
         status=status.HTTP_200_OK,
     )
-<<<<<<< HEAD
-=======
 
 
 @api_view(["GET"])
@@ -428,4 +426,3 @@ def region_summary_view(request):
             {"error": "AI summary generation failed", "detail": str(e)},
             status=status.HTTP_502_BAD_GATEWAY,
         )
->>>>>>> 1ff9cbc49765760c6b94fd50a2e96fc9027ba7b5
