@@ -17,7 +17,7 @@ This service focuses on:
 # API Documentation
 
 Swagger UI:
-https://mbkgairwrk.ap-southeast-2.awsapprunner.com/swagger/
+https://x93rjdxbu4.ap-southeast-2.awsapprunner.com/swagger/
 
 ---
 
