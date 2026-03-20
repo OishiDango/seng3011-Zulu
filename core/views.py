@@ -417,8 +417,9 @@ def serialise_alert_for_ai(alert):
         openapi.Parameter(
             "window",
             openapi.IN_QUERY,
-            description="Optional time window",
+            description="Optional time window (7day, 1month, 3month, 6month)",
             type=openapi.TYPE_STRING,
+            enum=["7day", "1month", "3month", "6month"],
         ),
         openapi.Parameter(
             "from",
