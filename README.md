@@ -17,7 +17,7 @@ This service focuses on:
 # API Documentation
 
 Swagger UI:
-http://localhost:8000/swagger/
+https://mbkgairwrk.ap-southeast-2.awsapprunner.com/swagger/
 
 ---
 
