@@ -1,12 +1,13 @@
 from google import genai
 from google.genai import types
 from datetime import date
+import os
 
 # PORT = "7800"
 # os.environ['http_proxy'] = f"http://127.0.0.1:{PROXY_PORT}"
 # os.environ['https_proxy'] = f"http://127.0.0.1:{PROXY_PORT}"
 
-API_KEY = "AIzaSyCa6LB5tin7aK604YEsL9M3wQedlLptmE8"
+os.getenv("GEMINI_API_KEY")
 
 
 class GeminiSummary:
@@ -240,7 +241,11 @@ class GeminiSummary:
 
 
 if __name__ == "__main__":
-    AI = GeminiSummary(API_KEY, model_id="gemini-3-flash-preview")
+    api_key = os.getenv("GEMINI_API_KEY")
+    if api_key is None:
+        raise ValueError("GEMINI_API_KEY not set")
+
+    AI = GeminiSummary(api_key, model_id="gemini-3-flash-preview")
     # # AI = GeminiService(API_KEY, model_id="gemini-3.1-pro-preview")
     # while True:
     #     user_input = input("\ninput diseases:")
